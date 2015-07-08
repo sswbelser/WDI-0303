@@ -51,6 +51,14 @@ app.put("/users/:id", function(req, res) {
 	res.json(foundUser);
 });
 
+app.delete("/users/:id", function(req, res) {
+	var targetId = parseInt(req.params.id);
+	var foundUser = _.findWhere(users, {id: targetId});
+	var index = users.indexOf(foundUser);
+	users.splice(index, 1);
+	res.json(foundUser);
+});
+
 app.get("/users", function(req, res) {
 	res.json(users);
 });
