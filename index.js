@@ -11,6 +11,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 // parse application/json 
 app.use(bodyParser.json());
 
+// Sample hardcoded database
 var users = [
 	{
 		id: 1,
@@ -35,12 +36,14 @@ var users = [
 	}
 ];
 
+// Add more array objects
 app.post("/users", function(req, res) {
 	var newUser = req.body;
 	users.push(newUser);
 	res.json(users);
 });
 
+// Modify specific array object
 app.put("/users/:id", function(req, res) {
 	var targetId = parseInt(req.params.id);
 	var foundUser = _.findWhere(users, {id: targetId});
@@ -51,6 +54,7 @@ app.put("/users/:id", function(req, res) {
 	res.json(foundUser);
 });
 
+// Delete specific array object
 app.delete("/users/:id", function(req, res) {
 	var targetId = parseInt(req.params.id);
 	var foundUser = _.findWhere(users, {id: targetId});
@@ -59,6 +63,7 @@ app.delete("/users/:id", function(req, res) {
 	res.json(foundUser);
 });
 
+// Display whole array
 app.get("/users", function(req, res) {
 	res.json(users);
 });
