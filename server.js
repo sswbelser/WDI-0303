@@ -1,9 +1,14 @@
 // Server-side Node.js
 
+var cors = require("cors");
 var express = require("express");
 var app = express();
+app.use(cors());
 var bodyParser = require("body-parser");
 var _ = require("underscore");
+
+// serve js and css files from public folder
+app.use(express.static(__dirname + "/public"));
 
 // parse application/x-www-form-urlencoded 
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -15,26 +20,31 @@ app.use(bodyParser.json());
 var users = [
 	{
 		id: 1,
-		username: "sswbelser",
 		firstname: "Sabastian",
 		lastname: "Belser",
 		age: 26
 	},
 	{
 		id: 2,
-		username: "bobstopher",
 		firstname: "Bob",
 		lastname: "Snyder",
 		age: 30
 	},
 	{
-		id: 3,
-		username: "winnar",
 		fistname: "Rachel",
 		lastname: "Johnson",
 		age: 28
 	}
 ];
+
+app.get("/", function (req, res) {
+	res.sendFile(__dirname + "/public/index.html");
+})
+
+// Display whole array
+app.get("/users", function(req, res) {
+	res.json(users);
+});
 
 // Add more array objects
 app.post("/users", function(req, res) {
@@ -47,7 +57,6 @@ app.post("/users", function(req, res) {
 app.put("/users/:id", function(req, res) {
 	var targetId = parseInt(req.params.id);
 	var foundUser = _.findWhere(users, {id: targetId});
-	foundUser.username = req.body.username;
 	foundUser.firstname = req.body.firstname;
 	foundUser.lastname = req.body.lastname;
 	foundUser.age = req.body.age;
@@ -61,11 +70,6 @@ app.delete("/users/:id", function(req, res) {
 	var index = users.indexOf(foundUser);
 	users.splice(index, 1);
 	res.json(foundUser);
-});
-
-// Display whole array
-app.get("/users", function(req, res) {
-	res.json(users);
 });
 
 app.listen(3000);
